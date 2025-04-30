@@ -37,6 +37,7 @@ import '../widgets/home/home_item_card.dart';
 import '../widgets/localized.dart';
 import '../widgets/showcase/config/showcase_constants.dart';
 import '../widgets/showcase/showcase_button.dart';
+import '../pages/individual_page.dart';
 
 @RoutePage()
 class HomePage extends LocalizedStatefulWidget {
@@ -354,6 +355,19 @@ class _HomePageState extends LocalizedState<HomePage> {
           },
         ),
       ),
+       i18.home.individual: homeShowcaseData.individual.buildWith(
+        child: HomeItemCard(
+          icon: Icons.table_chart,
+          label: i18.home.individual,
+           onPressed: () {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => const IndividualPage(),
+              ),
+            );
+          },
+        ),
+      ),
       i18.home.dashboard: homeShowcaseData.dashBoard.buildWith(
         child: HomeItemCard(
           icon: Icons.bar_chart_sharp,
@@ -376,6 +390,7 @@ class _HomePageState extends LocalizedState<HomePage> {
       i18.home.db: homeShowcaseData.db.showcaseKey,
       i18.home.dashboard: homeShowcaseData.dashBoard.showcaseKey,
       i18.home.clfLabel: homeShowcaseData.clf.showcaseKey,
+      i18.home.individual: homeShowcaseData.individual.showcaseKey,
     };
 
     final homeItemsLabel = <String>[
@@ -383,19 +398,19 @@ class _HomePageState extends LocalizedState<HomePage> {
       i18.home.syncDataLabel,
       i18.home.db,
       i18.home.dashboard,
+      i18.home.individual,
     ];
 
-    final List<String> filteredLabels = homeItemsLabel
+   final List<String> filteredLabels = homeItemsLabel
         .where((element) =>
             state.actionsWrapper.actions
                 .map((e) => e.displayName)
                 .toList()
                 .contains(element) ||
-            element == i18.home.db)
+            element == i18.home.db || element == i18.home.individual)
         .toList();
-
     final showcaseKeys = filteredLabels
-        .where((f) => f != i18.home.db)
+        .where((f) => f != i18.home.db && f != i18.home.individual)
         .map((label) => homeItemsShowcaseMap[label]!)
         .toList();
 

@@ -13,6 +13,8 @@ import 'package:location/location.dart';
 import 'blocs/app_initialization/app_initialization.dart';
 import 'blocs/auth/auth.dart';
 import 'blocs/localization/localization.dart';
+import 'blocs/project/individual_bloc.dart';
+import 'blocs/project/individual_memberbloc.dart';
 import 'blocs/project/project.dart';
 import 'data/local_store/app_shared_preferences.dart';
 import 'data/network_manager.dart';
@@ -20,6 +22,10 @@ import 'data/remote_client.dart';
 import 'data/repositories/remote/bandwidth_check.dart';
 import 'data/repositories/remote/localization.dart';
 import 'data/repositories/remote/mdms.dart';
+import 'data/repositories/remote/individual_details.dart';
+
+import 'data/repositories/remote/individual_member.dart';
+
 import 'router/app_navigator_observer.dart';
 import 'router/app_router.dart';
 import 'utils/environment_config.dart';
@@ -258,6 +264,16 @@ class MainApplicationState extends State<MainApplication>
                                 ProjectFacilitySearchModel>(),
                           ),
                         ),
+                        BlocProvider<IndividualBloc>(
+          create: (context) => IndividualBloc(
+            IndividualDetailRemoteRepository(widget.client),
+          ),
+        ),
+        BlocProvider<IndividualMemberBloc>(
+          create: (context) => IndividualMemberBloc(
+            IndividualMemberRemoteRepository(widget.client),
+          ),
+        ),
                         BlocProvider(
                           create: (context) => ProductVariantBloc(
                             const ProductVariantEmptyState(),

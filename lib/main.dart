@@ -36,7 +36,7 @@ void main() async {
     await AppSharedPreferences().appLaunchedFirstTime();
     await LocalSecureStore.instance.deleteAll();
   }
-
+  
   await envConfig.initialize();
   WidgetsBinding.instance.addObserver(AppLifecycleObserver());
   _dio = DioClient().dio;

@@ -99,6 +99,12 @@ class _HomePageShowcaseData {
     messageLocalizationKey: i18.home.db,
   );
 
+ 
+  final individual = ShowcaseItemBuilder(
+    messageLocalizationKey: i18.home.individual,
+  );
+
+
   final dashBoard = ShowcaseItemBuilder(
     messageLocalizationKey: i18.home.dashboard,
   );

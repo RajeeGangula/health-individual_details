@@ -16,6 +16,9 @@ import '../pages/qr_details_page.dart';
 import '../pages/reports/beneficiary/beneficaries_report.dart';
 import '../pages/unauthenticated.dart';
 export 'package:auto_route/auto_route.dart';
+import '../pages/individual_createpage.dart';
+import '../pages/individual_page.dart';
+import '../pages/individual_resultspage.dart';
 
 part 'app_router.gr.dart';
 
@@ -53,6 +56,10 @@ class AppRouter extends _$AppRouter {
         AutoRoute(
           page: BeneficiariesReportRoute.page,
           path: 'beneficiary-downsync-report',
+        ),
+        AutoRoute(
+          page: IndividualRoute.page,
+          path: 'individual-create-page',
         ),
 
         // INFO : Need to add Router of package Here

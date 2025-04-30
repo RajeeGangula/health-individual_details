@@ -31,6 +31,7 @@ import '../router/app_router.dart';
 import '../widgets/progress_indicator/progress_indicator.dart';
 import 'constants.dart';
 import 'extensions/extensions.dart';
+import '../models/data_model.init.dart' as hcm_mappers;
 
 export 'app_exception.dart';
 export 'constants.dart';
@@ -461,6 +462,7 @@ initializeAllMappers() async {
     Future(() => attendance_mappers.initializeMappers()),
     Future(() => data_model_mappers.initializeMappers()),
     Future(() => dss_mappers.initializeMappers()),
+    Future(() => hcm_mappers.initializeMappers()),
   ];
   await Future.wait(initializations);
 }
