@@ -10,6 +10,7 @@ import '../widgets/localized.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:reactive_forms/reactive_forms.dart';
+import 'package:intl/intl.dart';
 
 class IndividualCreatePage extends LocalizedStatefulWidget {
   const IndividualCreatePage({
@@ -41,21 +42,21 @@ class _IndividualCreatePageState extends LocalizedState<IndividualCreatePage> {
   Widget build(BuildContext context) {
     return BlocListener<IndividualBloc, IndividualState>(
       listener: (context, state) {
-        if (state is IndividualCreated) {
+        if (state is CreateIndividual!=null) {
           Toast.showToast(
             context,
             message: localizations.translate('Individual created successfully'),
             type: ToastType.success,
           );
-          Navigator.pop(context);
-        } else if (state is IndividualError) {
-          Toast.showToast(
-            context,
-            message: state.error as String,
-            type: ToastType.error,
-          );
-        }
-      },
+          Navigator.pop(context);    
+        } else if (state.error != null) {
+      Toast.showToast(
+        context,
+        message: state.error!,
+        type: ToastType.error,
+      );
+    }
+  },
       child: Scaffold(
         appBar: AppBar(
           title: Text('Create Individual'),
@@ -82,7 +83,7 @@ class _IndividualCreatePageState extends LocalizedState<IndividualCreatePage> {
                       address: [
                         HCMAddressModel(
                           locality: HCMAddressLocalityModel(code: context.boundary.code),
-                           type: "CORRESPONDENCE"
+                          type: "CORRESPONDENCE"
                         )
                       ],
                       clientAuditDetails: HCMAuditDetails(
@@ -124,7 +125,7 @@ class _IndividualCreatePageState extends LocalizedState<IndividualCreatePage> {
                   children: [
                     _buildInputField(context, form, _nameKey, 'Name'),
                     _buildDisabledField(context, _idKey, 'ID'),
-                    _buildInputField(context, form, _dobKey, 'Date of birth (dd/mm/yyyy)'),
+                    _buildDatePickerField(context, form, _dobKey, 'Date of birth'),
                     _buildDropdownField(context, form, _genderKey, 'Gender'),
                     _buildInputField(context, form, _mobileNumberKey, 'Mobile number'),
                   ],
@@ -168,6 +169,43 @@ class _IndividualCreatePageState extends LocalizedState<IndividualCreatePage> {
     );
   }
 
+  Widget _buildDatePickerField(
+    BuildContext context,
+    FormGroup form,
+    String controlName,
+    String labelText,
+  ) {
+    return ReactiveWrapperField(
+      formControlName: controlName,
+      builder: (field) => LabeledField(
+        label: localizations.translate(labelText),
+        isRequired: true,
+        child: GestureDetector(
+          onTap: () async {
+            final pickedDate = await showDatePicker(
+              context: context,
+              initialDate: DateTime.now(),
+              firstDate: DateTime(1900),
+              lastDate: DateTime.now(),
+            );
+
+            if (pickedDate != null) {
+              final formattedDate = DateFormat('dd/MM/yyyy').format(pickedDate);
+              form.control(controlName).value = formattedDate;
+            }
+          },
+          child: AbsorbPointer(
+            child: DigitTextFormInput(
+              initialValue: form.control(controlName).value,
+              errorMessage: field.errorText,
+              readOnly: true,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
   Widget _buildDropdownField(BuildContext context, FormGroup form,
       String controlName, String labelText) {
     return ReactiveWrapperField(
@@ -206,10 +244,4 @@ class _IndividualCreatePageState extends LocalizedState<IndividualCreatePage> {
       ),
     );
   }
-}
-
-class IndividualCreated {
-}
-
-class IndividualError {
 }
